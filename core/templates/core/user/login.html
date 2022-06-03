@@ -1,0 +1,44 @@
+{% extends 'core/base/base.html' %}
+
+{% block base_body %}
+<div class="row align-items-center g-1 py-5">
+    <div class="col-lg-7 text-center text-lg-start">
+        <h1 class="display-4 fw-bold lh-1 mb-3">Peru Exploración</h1>
+        <p class="col-lg-10 fs-4">¿No tienes una cuenta? ¡Regístrese ahora para comenzar a aprender sobre la historia del Perú utilizando nuestras herramientas interactivas!</p>
+    </div>
+
+    <div class="col-md-10 mx-auto col-lg-5">        
+        <form action={% if request.GET.next %}
+            "{%url 'core:user_login'%}?next={{request.GET.next}}"
+            {% else %}
+            "{%url 'core:user_login'%}"
+            {% endif %}
+            method='post' class="p-3 border rounded-3 bg-light">
+
+            {% csrf_token %}
+            <div class="form-floating mb-3">
+                <input name="username" type="text" class="form-control" id="username" placeholder="username">
+                <label for="floatingInput">Username</label>
+            </div>
+
+            <div class="form-floating mb-3">
+                <input name="password" type="password" class="form-control" id="password" placeholder="Password">
+                <label for="floatingPassword">Password</label>
+            </div>
+
+            <button class="w-100 btn btn-lg btn-primary" type="submit">Login</button>
+
+            <hr class="my-4">
+            
+            <a href={% if request.GET.next %}"{% url "core:register" %}?next={{request.GET.next}}"
+                {% else %}
+                "{% url 'core:register' %}"
+                {% endif %}                    
+                class="w-100 btn btn-lg btn-success">
+                Register
+            </a>
+        </form>
+    </div>
+</div>
+
+{% endblock base_body %}

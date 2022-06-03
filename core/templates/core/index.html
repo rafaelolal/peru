@@ -1,0 +1,25 @@
+{% extends 'core/base/base.html' %}
+
+{% load static %}
+{% comment %} {% load my_tags %} {% endcomment %}
+{% comment %} {% load my_filters %} {% endcomment %}
+
+{% block base_body %}
+<div class="container py-4">
+<div class="card bg-dark text-white mb-4">
+    <img src="https://www.peru.travel/Contenido/AcercaDePeru/Imagen/en/6/0.0/Principal/Machu%20Picchu.jpg" class="card-img">
+    <div class="card-img-overlay d-flex flex-column justify-content-center align-items-center">
+        <h1 class="card-title display-5 fw-bold">Peru Exploración</h1>
+        <p class="card-text fs-4">¡Explora la historia del Perú de forma interactiva!</p>
+    
+        <div class="col col-6 p-0">
+            <form action="{% url "core:page_list" %}"class="d-flex">
+                <input name="search" class="form-control me-2" list="datalistOptions" type="search" placeholder="Buscar" aria-label="Search">
+                <button class="btn btn-success" type="submit">Buscar</button>
+            </form>
+        </div>
+        <a href="{%url 'core:page_list'%}" class="btn btn-success mt-2">Comience Su Exploración</a>
+    </div>
+</div>
+</div>
+{% endblock base_body %}

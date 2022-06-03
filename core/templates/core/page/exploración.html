@@ -1,0 +1,217 @@
+{% extends 'core/base/base.html' %}
+
+{% load my_filters %}
+{% load my_tags %}
+{% load static %}
+
+{% block base_body %}
+    
+{% if user.is_superuser %}
+<a id="section" href="" class='btn btn-primary'>Create Section</a>
+<a id="place" href="" class='btn btn-primary'>Create Place</a>
+<a id="update" href="" class="btn btn-warning mx-1">Update</a>
+{% endif %}
+
+<div class="row">
+    <div class="col col-12 col-lg-6 mb-2">
+        <div class="p-3 text-center bg-light rounded-3">
+            <h1 id="periodLabel" for="yearRange" class="display-5 fw-bold"></h1> 
+        </div>
+    </div>
+    <div class="col col-12 col-lg-6 mb-2">
+        <div class="p-3 bg-light rounded-3 text-center">
+            <input type="radio" value="Historia" class="btn-check" name="options" id="Historia" oninput="updateInfo()">
+            <label class="btn btn-outline-dark btn-lg" for="Historia"><h2>Historia</h2></label>            
+            <input type="radio" value="Costumbres" class="btn-check" name="options" id="Costumbres" oninput="updateInfo()">
+            <label class="btn btn-outline-dark btn-lg" for="Costumbres"><h2>Costumbres</h2></label>
+            <input type="radio" value="Lugares" class="btn-check" name="options" id="Lugares" oninput="updateInfo()">
+            <label class="btn btn-outline-dark btn-lg" for="Lugares"><h2>Lugares</h2></label>  
+        </div>
+    </div>
+    <div class="row">
+        <div class="col col-auto">
+            <h3 id="yearLabel" for="yearRange" class=""></h3>
+        </div>
+        <div class="col">
+            <input style="transform: scale(1.5); transform-origin: 0 0; width: 68%;" list="steplist" id="yearRange" type="range" name="rangeInput" value="" min="1438" max="2022" oninput="updatePeriod(this.value)" onchange="updateInfo()">
+            <datalist id="steplist">
+                <option>1438</option>
+                <option>1533</option>
+                <option>1542</option>
+                <option>1821</option>
+                <option>1879</option>
+            </datalist>
+        </div>
+    </div>
+</div>
+
+<hr class="divider">
+
+<div id="page" style="display: none">
+
+<div class="row">
+    <div class="col col-12 col-lg-6 mb-2">
+        <img data-toggle="tooltip" title="Presiona el mapa" id="map" src="" class="img-fluid" data-bs-toggle="modal" data-bs-target="#exampleModal">
+
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-xl">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <img id="map-modal" src="" style="height: 100%; width: 100%" class="img-fluid">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col col-12 col-lg-6 mb-2">
+        <div id="sections" style="overflow: auto;" data-bs-spy="scroll" data-bs-target="#navbar-example2" data-bs-root-margin="0px 0px -40%" data-bs-smooth-scroll="true" class="scrollspy-example" tabindex="0">
+        </div>
+    </div>
+</div>
+
+</div>
+
+<script>
+    searchParams = new URLSearchParams(window.location.search)
+
+    function updateLike(place_pk) {
+        $.ajax({
+            url: '{% url 'core:like' %}?place=' + place_pk,
+            type: 'get',
+            success: function(data) {
+                $("#place" + place_pk).html(data.likes)
+            }
+        })
+    }
+
+    function updateInfo(place_pk) {
+        $.ajax({
+            url: '{% url 'core:update_info' %}?period=' + $("#periodLabel").html() + "&category=" + $("input[type='radio']:checked").val(),
+            type: 'get',
+            success: function(data) {
+                $("#page").fadeOut(500);
+
+                setTimeout(function() {
+                    $('#map').attr("src", data.map)
+                    $('#map-modal').attr("src", data.map)
+                    $('#section').attr("href", data.section)
+                    $('#place').attr("href", data.place)
+                    $('#update').attr("href", data.update)
+                    
+                    $('#sections').empty()
+                    for (let i = 0; i < data.sections[0]; i++) {
+                        $(`
+                            <h2>` + data.sections[1][i][0] + `    </h2>
+                            {% if user.is_superuser %}
+                            <a href='` + data.sections[1][i][1] + `' type="button" class="btn btn-warning mb-1">Update</a>
+                            {% endif %}
+                            <p>` + data.sections[1][i][2] + `</p>
+                            <img class="img-fluid mx-auto" src="` + data.sections[1][i][3] + `" role="img" preserveAspectRatio="xMidYMid slice">
+                        `).appendTo('#sections')
+
+                        if (i != data.sections[0]-1) {
+                            $(`<hr class="divider">`).appendTo('#sections')
+                        }
+                    }
+                    
+                    for (let i = 0; i < data.places[0]; i++) {
+                        $(`
+                            <div class="card bg-dark text-white">
+                                <img src="` + data.places[1][i][3] + `" class="card-img">
+                                <div class="card-img-overlay">
+                                <h5 class="card-title">` + data.places[1][i][0] + `</h5>
+                                
+                                <p class="card-text"><a type="button" class="btn btn-outline-success me-2" onclick="updateLike(` + data.places[1][i][4] + `)">Like</a><small id="place` + data.places[1][i][4] + `" class="text-muted">` + data.places[1][i][5] + `</small></p>
+                                {% if user.is_superuser %}
+                                <a href='` + data.places[1][i][1] + `' type="button" class="btn btn-warning">Update</a>
+                                {% endif %}
+                                <p class="card-text">` + data.places[1][i][2] + `</p>
+                            </div>
+                        `).appendTo('#sections')
+
+                        if (i != data.places[0]-1) {
+                            $(`<hr class="divider">`).appendTo('#sections')
+                        }
+                    }
+                    
+                    setTimeout(function() {
+                        resizeScroll()
+                    }, 50)
+
+                    $("#page").fadeIn();
+
+                }, 500)
+
+            },
+            
+            failure: function(data) { 
+                alert('Got an error dude');
+            }
+        })
+      }
+
+    function updatePeriod(val) {
+        $('#yearLabel').html(val);
+
+        if (1879 <= val) {
+            val = "Presente"
+        }
+        else if (1821 <= val ) {
+            val = "Independencia"
+        }
+        else if (1542 <= val) {
+            val = "Monarquía del Perú"
+        }
+        else if (1533 <= val) {
+            val = "Colonial"
+        }
+        else if (1438 <= val) {
+            val = "Incas"
+        }
+        
+        prev = $('#periodLabel').html()
+        if (val != prev) {
+            $('#periodLabel').html(val)
+        } 
+    }
+
+    function getYear() {
+        years = {"": 1438, "Incas": 1438,
+                 "Colonial": 1533, "Monarquía del Perú": 1542,
+                 "Independencia": 1821, "Presente": 1879}
+
+        searchParams = new URLSearchParams(window.location.search)
+        period = searchParams.get('period')
+        updatePeriod(years[period])
+        $('#yearRange').val(years[period])
+    }
+
+    function getCategory() {
+        category = searchParams.get('category')
+        if (category == "") {
+            $("#Historia").attr("checked", "checked")
+        }
+        else {
+            $("#" + category).attr("checked", "checked")
+        }
+    }
+
+    function resizeScroll() {
+        $("#sections").css("height", $("#map").css("height"))
+    }
+    
+    $(document).ready(function funLoad() {
+        $("#page").removeClass("hidden");
+        getCategory()
+        getYear()
+        updateInfo()
+    })
+
+    $(window).on('resize', function(){
+        resizeScroll();
+    });
+
+</script>
+
+{% endblock base_body %}

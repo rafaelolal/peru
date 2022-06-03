@@ -1,0 +1,9 @@
+{% extends 'core/base/form.html' %}
+
+{% block form_body %}
+
+<h1>Updating {{form.instance.period}} {{form.instance.category}}</h1>
+<a href="{%url 'core:exploración' %}?period={{ form.instance.period }}&category={{ form.instance.category }}" class="btn btn-warning">Cancel</a>
+<a href="{%url 'core:page_delete' pk=form.instance.pk%}" class="btn btn-danger">Delete</a>
+
+{% endblock form_body %}

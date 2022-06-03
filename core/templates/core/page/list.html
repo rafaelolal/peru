@@ -1,0 +1,44 @@
+{% extends 'core/base/base.html' %}
+
+{% load my_filters %}
+{% load my_tags %}
+{% load static %}
+
+{% block base_body %}
+
+<div class="row">
+{% if page_list %}
+{% for page in page_list %}
+<div class="h-100 card mb-3 me-3 p-0" style="max-width: 600px;">
+    <div class="row g-0">
+        <div class="col-md-4">
+        <a href="{%url 'core:exploración' %}?period={{ page.period }}&category={{ page.category }}">
+            <img data-toggle="tooltip" title="Presiona el mapa" src="{{ page.map.url }}" class="img-fluid rounded-start" alt="...">
+        </a>
+        </div>
+        
+        <div class="col-md-8 my-auto">
+            <div class="card-body">
+                <ul class="list-group">
+                    <a class="list-group-item" aria-current="true">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h5 class="mb-1">Período</h5>
+                        </div>                        
+                        <p>{{ page.period }}</p>
+                    </a>
+                    <a class="list-group-item" aria-current="true">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h5 class="mb-1">Categoria</h5>
+                        </div>                        
+                        <p>{{ page.category }}</p>
+                    </a>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+{% endif %}
+</div>
+
+{% endblock base_body %}

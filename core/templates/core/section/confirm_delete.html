@@ -1,0 +1,9 @@
+{% extends 'core/base/confirm_delete.html' %}
+
+{% block delete_body %}
+<h1>Delete the section "{{section.title}}" on "{{section.page.period}} {{section.page.category}}"?</h1>
+{% endblock delete_body %}
+
+{% block cancel_button %}
+<a href="{%url 'core:section_update' pk=section.pk page_pk=section.page.pk %}" class="btn btn-success">Cancel</a>
+{% endblock cancel_button %}

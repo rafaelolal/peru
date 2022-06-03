@@ -1,0 +1,9 @@
+{% extends 'core/base/confirm_delete.html' %}
+
+{% block delete_body %}
+<h1>Delete the Place "{{place.name}}" on "{{place.page.period}} {{place.page.category}}"?</h1>
+{% endblock delete_body %}
+
+{% block cancel_button %}
+<a href="{%url 'core:place_update' pk=place.pk page_pk=place.page.pk %}" class="btn btn-success">Cancel</a>
+{% endblock cancel_button %}

@@ -1,0 +1,18 @@
+{% extends 'core/base/form.html' %}
+
+{% load my_tags %}
+
+
+{% block form_body %}
+{% get_page view.kwargs.page_pk as page %}
+<h1>Section on "{{page.period}} {{page.category}}"</h1>
+
+<a href="{%url 'core:exploración' %}?period={{ page.period }}&category={{ page.category }}"><button class="btn btn-warning mb-2" type="button">Cancel</button></a>
+{% if form.instance.pk %}
+<a href="{%url 'core:section_delete' pk=form.instance.pk%}" class="btn btn-danger mb-2" type="button">Delete</a>
+{% endif %}
+{% endblock form_body %}
+
+{% block form_fields %}
+
+{% endblock form_fields %}
