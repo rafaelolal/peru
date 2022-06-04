@@ -39,8 +39,7 @@ SECRET_KEY = 'django-insecure-joew%va9i9n*r!2c!ce+dm6pn81)*vzq5ioaao7hcv(q0i2n5#
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
-
-
+CSRF_TRUSTED_ORIGINS = ['https://vt-her-registry-wagner.trycloudflare.com']
 # Application definition
 
 INSTALLED_APPS = [
