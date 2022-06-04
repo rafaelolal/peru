@@ -20,11 +20,11 @@
     </div>
     <div class="col col-12 col-lg-6 mb-2">
         <div class="p-3 bg-light rounded-3 text-center">
-            <input type="radio" value="Historia" class="btn-check" name="options" id="Historia" oninput="updateInfo()">
+            <input type="radio" value="Historia" class="btn-check" name="options" id="Historia" oninput="updateCategory()">
             <label class="btn btn-outline-dark btn-lg" for="Historia"><h2>Historia</h2></label>            
-            <input type="radio" value="Costumbres" class="btn-check" name="options" id="Costumbres" oninput="updateInfo()">
+            <input type="radio" value="Costumbres" class="btn-check" name="options" id="Costumbres" oninput="updateCategory()">
             <label class="btn btn-outline-dark btn-lg" for="Costumbres"><h2>Costumbres</h2></label>
-            <input type="radio" value="Lugares" class="btn-check" name="options" id="Lugares" oninput="updateInfo()">
+            <input type="radio" value="Lugares" class="btn-check" name="options" id="Lugares" oninput="updateCategory()">
             <label class="btn btn-outline-dark btn-lg" for="Lugares"><h2>Lugares</h2></label>  
         </div>
     </div>
@@ -78,6 +78,11 @@
                 $("#place" + place_pk).html(data.likes)
             }
         })
+    }
+    
+    function updateCategory() {
+        updatePeriod($("#yearRange").val())
+        updateInfo()
     }
 
     function updateInfo(place_pk) {
@@ -159,7 +164,6 @@
             },
             
             failure: function(data) { 
-                alert('Got an error dude');
             }
         })
       }
