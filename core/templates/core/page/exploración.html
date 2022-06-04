@@ -33,13 +33,8 @@
             <h3 id="yearLabel" for="yearRange" class=""></h3>
         </div>
         <div class="col">
-            <input style="transform: scale(1.5); transform-origin: 0 0; width: 68%;" list="steplist" id="yearRange" type="range" name="rangeInput" value="" min="1438" max="2022" oninput="updatePeriod(this.value)" onchange="updateInfo()">
+            <input style="transform: scale(1.5); transform-origin: 0 0; width: 68%;" list="steplist" id="yearRange" type="range" name="rangeInput" value="" min="1438" max="2022" oninput="updatePeriod(this.value)">
             <datalist id="steplist">
-                <option>1438</option>
-                <option>1533</option>
-                <option>1542</option>
-                <option>1821</option>
-                <option>1879</option>
             </datalist>
         </div>
     </div>
@@ -93,6 +88,24 @@
                 $("#page").fadeOut(500);
 
                 setTimeout(function() {
+
+                    if ($("#Costumbres").is(":checked")) {
+                        $("#steplist").html(
+                            `<option>1438</option>
+                            <option>1533</option>
+                            <option>1879</option>`
+                        )                        
+                    }
+                    else {
+                        $("#steplist").html(
+                            `<option>1438</option>
+                            <option>1533</option>
+                            <option>1542</option>
+                            <option>1821</option>
+                            <option>1879</option>`
+                        )   
+                    }
+
                     $('#map').attr("src", data.map)
                     $('#map-modal').attr("src", data.map)
                     $('#section').attr("href", data.section)
@@ -137,7 +150,7 @@
                     
                     setTimeout(function() {
                         resizeScroll()
-                    }, 50)
+                    }, 75)
 
                     $("#page").fadeIn();
 
@@ -154,25 +167,40 @@
     function updatePeriod(val) {
         $('#yearLabel').html(val);
 
-        if (1879 <= val) {
-            val = "Presente"
+        if ($("#Costumbres").is(":checked")) {
+            if (1879 <= val) {
+                val = "Presente"
+            }
+            else if (1533 <= val) {
+                val = "Colonial"
+            }
+            else if (1438 <= val) {
+                val = "Incas"
+            }
         }
-        else if (1821 <= val ) {
-            val = "Independencia"
-        }
-        else if (1542 <= val) {
-            val = "Monarquía del Perú"
-        }
-        else if (1533 <= val) {
-            val = "Colonial"
-        }
-        else if (1438 <= val) {
-            val = "Incas"
+
+        else {
+            if (1879 <= val) {
+                val = "Presente"
+            }
+            else if (1821 <= val ) {
+                val = "Independencia"
+            }
+            else if (1542 <= val) {
+                val = "Monarquía del Perú"
+            }
+            else if (1533 <= val) {
+                val = "Colonial"
+            }
+            else if (1438 <= val) {
+                val = "Incas"
+            }
         }
         
         prev = $('#periodLabel').html()
         if (val != prev) {
             $('#periodLabel').html(val)
+            updateInfo()
         } 
     }
 
