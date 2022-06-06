@@ -101,6 +101,16 @@
                             <option>1879</option>`
                         )                        
                     }
+                    
+                    if ($("#Lugares").is(":checked")) {
+                        $("#steplist").html(
+                            `<option>1438</option>
+                            <option>1533</option>
+                            <option>1821</option>
+                            <option>1879</option>`
+                        )                        
+                    }
+
                     else {
                         $("#steplist").html(
                             `<option>1438</option>
@@ -140,7 +150,7 @@
                                 <div class="card-img-overlay">
                                 <h5 class="card-title">` + data.places[1][i][0] + `</h5>
                                 
-                                <p class="card-text"><a type="button" class="btn btn-outline-success me-2" onclick="updateLike(` + data.places[1][i][4] + `)">Like</a><small id="place` + data.places[1][i][4] + `" class="text-muted">` + data.places[1][i][5] + `</small></p>
+                                <p class="card-text"><a type="button" class="btn btn-outline-success me-2" onclick="updateLike(` + data.places[1][i][4] + `)">Like</a><small id="place` + data.places[1][i][4] + `" class="">` + data.places[1][i][5] + `</small></p>
                                 {% if user.is_superuser %}
                                 <a href='` + data.places[1][i][1] + `' type="button" class="btn btn-warning">Update</a>
                                 {% endif %}
@@ -174,6 +184,21 @@
         if ($("#Costumbres").is(":checked")) {
             if (1879 <= val) {
                 val = "Presente"
+            }
+            else if (1533 <= val) {
+                val = "Colonial"
+            }
+            else if (1438 <= val) {
+                val = "Incas"
+            }
+        }
+
+        else if ($("#Lugares").is(":checked")) {
+            if (1879 <= val) {
+                val = "Presente"
+            }
+            else if (1821 <= val ) {
+                val = "Independencia"
             }
             else if (1533 <= val) {
                 val = "Colonial"
