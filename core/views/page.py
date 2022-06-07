@@ -33,7 +33,7 @@ class PageListView(ListView):
             page = queryset.first()
             return HttpResponseRedirect(reverse('core:exploración') + f"?period={page.period}&category={page.category}")
 
-        if len(queryset) == self.model.objects.all().count():
+        if len(queryset) == self.model.objects.all().count() and "search" in request.GET:
             messages.warning(request,
                 'Nothing matches your search.')
 
