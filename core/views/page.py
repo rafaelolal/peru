@@ -33,6 +33,10 @@ class PageListView(ListView):
             page = queryset.first()
             return HttpResponseRedirect(reverse('core:exploración') + f"?period={page.period}&category={page.category}")
 
+        if len(queryset) == self.model.objects.all().count():
+            messages.warning(request,
+                'Nothing matches your search.')
+
         return super().get(request, *args, **kwargs)
 
     def get_queryset(self) -> QuerySet:
@@ -42,14 +46,18 @@ class PageListView(ListView):
         """
 
         search_querysets = []
+        print(self.request.GET)
         if 'search' in self.request.GET:
             query = self.request.GET['search']
             for page in self.model.objects.all():
                 for section in page.sections.all():
+                    print(query, "query")
                     if query in section.content or query in section.title:
                         search_querysets.append(self.model.objects.all().filter(pk=page.pk))
+                        print(page.pk, "contains this")
                         break
 
+        print(len(search_querysets), "length")
         if len(search_querysets) == 0:
             return self.model.objects.all();
 

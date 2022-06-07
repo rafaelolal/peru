@@ -9,7 +9,8 @@
 <div class="row">
 {% if page_list %}
 {% for page in page_list %}
-<div class="h-100 card mb-3 me-3 p-0" style="max-width: 600px;">
+<div class="col col-6">
+<div class="card mb-3 me-3 p-0" style="max-width: 600px;">
     <div class="row g-0">
         <div class="col-md-4">
         <a href="{%url 'core:exploración' %}?period={{ page.period }}&category={{ page.category }}">
@@ -36,6 +37,7 @@
             </div>
         </div>
     </div>
+</div>
 </div>
 {% endfor %}
 {% endif %}
