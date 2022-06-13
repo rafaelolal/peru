@@ -46,18 +46,19 @@ class PageListView(ListView):
         """
 
         search_querysets = []
-        print(self.request.GET)
         if 'search' in self.request.GET:
             query = self.request.GET['search']
             for page in self.model.objects.all():
                 for section in page.sections.all():
-                    print(query, "query")
                     if query in section.content or query in section.title:
                         search_querysets.append(self.model.objects.all().filter(pk=page.pk))
-                        print(page.pk, "contains this")
                         break
 
-        print(len(search_querysets), "length")
+                for place in page.places.all():
+                    if query in place.name or query in place.description:
+                        search_querysets.append(self.model.objects.all().filter(pk=page.pk))
+                        break
+
         if len(search_querysets) == 0:
             return self.model.objects.all();
 

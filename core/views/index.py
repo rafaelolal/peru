@@ -10,3 +10,6 @@ class IndexView(TemplateView):
 
 class ExplorationView(TemplateView):
     template_name = 'core/page/exploración.html'
+
+class AboutView(TemplateView):
+    template_name = 'core/about.html'
